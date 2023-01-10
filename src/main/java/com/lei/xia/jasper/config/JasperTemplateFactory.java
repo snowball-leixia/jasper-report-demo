@@ -14,16 +14,16 @@ import org.springframework.util.ResourceUtils;
 @Configuration
 public class JasperTemplateFactory {
 
-    @Bean
-    public JasperReport movementJasperReport(
-        @Value("${pdf.report.template.movement:movement.jrxml}") 
-        String fileName) {
-        try {
-            File templateFile = ResourceUtils
-            .getFile("classpath:jasper-template/" + fileName);
-            return JasperCompileManager.compileReport(templateFile.getAbsolutePath());
-        } catch (FileNotFoundException | JRException ex) {
-            throw new SetupException("Fail to create JasperReport Bean for template movement.jrxml");
-        }
+  @Bean
+  public JasperReport movementJasperReport(
+      @Value("${pdf.report.template.movement:movement.jrxml}")
+      String fileName) {
+    try {
+      File templateFile = ResourceUtils
+          .getFile("classpath:jasper-template/" + fileName);
+      return JasperCompileManager.compileReport(templateFile.getAbsolutePath());
+    } catch (FileNotFoundException | JRException ex) {
+      throw new SetupException("Fail to create JasperReport Bean for template movement.jrxml");
     }
+  }
 }

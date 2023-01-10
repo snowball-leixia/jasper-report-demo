@@ -25,11 +25,11 @@ public class PdfDocumentPrintService implements DocumentPrintService<Movement, b
       var vars = new HashMap<String, Object>(1);
       vars.put("Author", "Lei Xia");
       var jasperPrinter = JasperFillManager.fillReport(movementJasperReport,
-      vars, dataSource);
+          vars, dataSource);
       return JasperExportManager.exportReportToPdf(jasperPrinter);
     } catch (JRException e) {
-      throw new PdfGenerationException(String.format("Error: fail to generate report %s", 
-      e.getMessage()));
+      throw new PdfGenerationException(String.format("Error: fail to generate report %s",
+          e.getMessage()));
     }
   }
 

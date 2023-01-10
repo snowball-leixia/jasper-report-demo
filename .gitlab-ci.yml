@@ -1,0 +1,67 @@
+image: maven:3-jdk-12-alpine
+
+.heading: &heading
+  - echo "Stage Job Started"
+
+variables:
+  MESSAGE: "MAVEN JAVA CI PIPELINE"
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  WORK_DIR: $CI_PROJECT_NAME
+  BRANCH: $CI_COMMIT_REF_NAME
+  REGISTRY: registry.gitlab.com/lei.xia/git-ci
+  USER: $CI_REGISTRY_USER
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - ./.m2/repository
+    - target/
+
+stages:
+  - build
+  - test
+  - quality
+  - docker-build
+
+include:
+  project: 'lei.xia/ci-fragment'
+  file: 'maven/fragments/test.yml'
+  ref: develop
+
+build:
+  stage: build
+  before_script:
+    - *heading
+    - mvn --version
+    - echo BUILD $MESSAGE
+  script:
+    - mvn clean package $MAVEN_OPTS
+
+pmd:
+  stage: quality
+  before_script:
+    - *heading
+    - echo PMD $MESSAGE
+  script:
+    - mvn pmd:check -Dpmd.failurePriority=4
+
+checkstyle:
+  stage: quality
+  before_script:
+    - *heading
+    - echo Checkstyle $MESSAGE
+  script:
+    - mvn checkstyle:check -Dcheckstyle.config.location=google_checks.xml -Dcheckstyle.violationSeverity=warning -Dcheckstyle.suppressions.location=checkstyle/checkstyle-suppressions.xml
+
+docker_build:
+  stage: docker-build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - *heading
+    - echo Docker-Build $MESSAGE
+    - echo $CI_BUILD_TOKEN | docker login -u $USER --password-stdin registry.gitlab.com
+  script:
+    - docker build -t $REGISTRY .
+    - docker push $REGISTRY

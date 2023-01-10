@@ -14,15 +14,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class PdfDocumentPrintServiceTest {
 
-    @InjectMocks
-    private PdfDocumentPrintService pdfDocumentPrintService;
-    @Mock
-    private JasperReport jasperReportMock;
+  @InjectMocks
+  private PdfDocumentPrintService pdfDocumentPrintService;
+  @Mock
+  private JasperReport jasperReportMock;
 
-    @Test
-    void should_generate_empty_byte_array_from_movement() {
-        var movement = new Movement(UUID.randomUUID().toString(), "France", "UK");
-        var actual = pdfDocumentPrintService.generate(movement);
-        assertEquals(1, actual.length);
-    }
+  @Test
+  void should_generate_empty_byte_array_from_movement() {
+    var movement = new Movement(UUID.randomUUID().toString(), "France", "UK");
+    var actual = pdfDocumentPrintService.generate(movement);
+    assertEquals(1, actual.length);
+  }
 }

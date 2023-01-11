@@ -42,16 +42,31 @@ pmd:
   before_script:
     - *heading
     - echo PMD $MESSAGE
+  allow_failure: false
   script:
     - mvn pmd:check -Dpmd.failurePriority=4
+  artifacts:
+    when: on_failure
+    paths:
+      - target/pmd.xml
+    expire_in: 60 mins
 
 checkstyle:
   stage: quality
   before_script:
     - *heading
     - echo Checkstyle $MESSAGE
+  allow_failure: false
   script:
-    - mvn checkstyle:check -Dcheckstyle.config.location=google_checks.xml -Dcheckstyle.violationSeverity=warning -Dcheckstyle.suppressions.location=checkstyle/checkstyle-suppressions.xml
+    - if [[ -f "$CI_PROJECT_DIR/checkstyle/checkstyle-suppressions.xml" ]]; then SUPPRESSIONS_LOC="-Dcheckstyle.suppressions.location=checkstyle/checkstyle-suppressions.xml"; else echo "No suppression file exists at checkstyle/checkstyle-suppressions.xml"; fi
+    - mvn checkstyle:check -Dmaven.repo.local=./.m2-local -Dcheckstyle.config.location=google_checks.xml -Dcheckstyle.violationSeverity=warning ${SUPPRESSIONS_LOC} ${MVN_OPTS} ${MVN_CLI_OPTS} -s ${MVN_SETTINGS_FILE}
+  artifacts:
+    when: on_failure
+    paths:
+      - target/checkstyle-result.xml
+    expire_in: 60
+  only: # only trigger on feature branch commit
+    - /^[Ff]-.*$/
 
 docker_build:
   stage: docker-build

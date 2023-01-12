@@ -15,8 +15,13 @@
     <description>demo jasper generate pdf</description>
     <properties>
         <java.version>11</java.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jasperreports.version>6.20.0</jasperreports.version>
-        <owasp.maven.plugin.version>7.4.4</owasp.maven.plugin.version>
+        <maven-owasp-plugin.version>7.4.4</maven-owasp-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <plugin-maven.checkstyle-puppycrawl.version>10.3.3</plugin-maven.checkstyle-puppycrawl.version>
+        <maven-checkstyle-plugin.version>3.2.0</maven-checkstyle-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -58,9 +63,44 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>application.properties</include>
+                    <include>jasper-template/movement.jrxml</include>
+                </includes>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${plugin-maven.checkstyle-puppycrawl.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/e2e/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -76,11 +116,11 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>${owasp.maven.plugin.version}</version>
+                <version>${maven-owasp-plugin.version}</version>
                 <configuration>
                     <cveValidForHours>12</cveValidForHours>
                     <failBuildOnCVSS>4</failBuildOnCVSS>
-                    <suppressionFile>src/main/resources/DependencySuppression.xml</suppressionFile>
+                    <suppressionFile>src/test/resources/DependencySuppression.xml</suppressionFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -92,5 +132,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

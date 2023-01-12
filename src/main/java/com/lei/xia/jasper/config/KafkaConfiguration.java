@@ -1,5 +1,7 @@
 package com.lei.xia.jasper.config;
 
+import com.lei.xia.jasper.event.inbound.InboundMessageHandler;
+import com.lei.xia.jasper.event.inbound.impl.KafkaInboundMessageHandler;
 import com.lei.xia.jasper.model.Movement;
 import java.util.Map;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -16,6 +19,7 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS
 import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
 
 @Configuration
+@EnableKafka
 public class KafkaConfiguration {
 
   @Bean
@@ -35,4 +39,9 @@ public class KafkaConfiguration {
     factory.setConsumerFactory(consumerFactory);
     return factory;
   }
+
+  @Bean
+  public InboundMessageHandler kafkaInboundMessageHandler() {
+    return new KafkaInboundMessageHandler();
+   }
 }

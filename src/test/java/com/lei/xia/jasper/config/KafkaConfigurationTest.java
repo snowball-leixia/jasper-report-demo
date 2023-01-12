@@ -1,5 +1,6 @@
 package com.lei.xia.jasper.config;
 
+import com.lei.xia.jasper.event.inbound.impl.KafkaInboundMessageHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -34,4 +35,9 @@ class KafkaConfigurationTest {
    assertThat(actual).isNotNull().isExactlyInstanceOf(ConcurrentKafkaListenerContainerFactory.class);
   }
 
+  @Test
+  void should_create_kafka_inbound_message_handler() {
+    var actual = kafkaConfiguration.kafkaInboundMessageHandler();
+    assertThat(actual).isNotNull().isExactlyInstanceOf(KafkaInboundMessageHandler.class);
+  }
 }

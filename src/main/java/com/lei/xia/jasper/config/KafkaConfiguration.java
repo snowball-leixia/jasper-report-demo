@@ -2,6 +2,8 @@ package com.lei.xia.jasper.config;
 
 import com.lei.xia.jasper.event.inbound.InboundMessageHandler;
 import com.lei.xia.jasper.event.inbound.impl.KafkaInboundMessageHandler;
+import com.lei.xia.jasper.event.outbound.OutboundMessageHandler;
+import com.lei.xia.jasper.event.outbound.impl.KafkaOutboundMessageHandler;
 import com.lei.xia.jasper.model.Movement;
 import java.util.Map;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -13,6 +15,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
@@ -44,4 +47,9 @@ public class KafkaConfiguration {
   public InboundMessageHandler kafkaInboundMessageHandler() {
     return new KafkaInboundMessageHandler();
    }
+  @Bean
+  public OutboundMessageHandler kafkaOutboundMessageHandler(@Autowired KafkaTemplate<String, Movement> kafkaTemplate) {
+    return new KafkaOutboundMessageHandler(kafkaTemplate);
+  }
+
 }

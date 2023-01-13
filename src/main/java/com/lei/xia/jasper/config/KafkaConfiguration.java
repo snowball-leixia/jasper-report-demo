@@ -1,5 +1,6 @@
 package com.lei.xia.jasper.config;
 
+import com.github.javafaker.Faker;
 import com.lei.xia.jasper.event.inbound.InboundMessageHandler;
 import com.lei.xia.jasper.event.inbound.impl.KafkaInboundMessageHandler;
 import com.lei.xia.jasper.event.outbound.OutboundMessageHandler;

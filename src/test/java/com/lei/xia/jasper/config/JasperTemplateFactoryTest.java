@@ -24,7 +24,7 @@ class JasperTemplateFactoryTest {
   }
 
   @Test
-  void should_throw_setupUp_exeption_with_bad_file_name() {
+  void should_throw_setupUp_exception_with_bad_file_name() {
     assertThrows(SetupException.class, () -> {
       jasperTemplateFactory.movementJasperReport("bad.file");
     });

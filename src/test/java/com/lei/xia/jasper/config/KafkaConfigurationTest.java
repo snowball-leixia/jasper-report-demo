@@ -1,6 +1,7 @@
 package com.lei.xia.jasper.config;
 
-import com.lei.xia.jasper.event.inbound.impl.KafkaInboundMessageHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lei.xia.jasper.event.inbound.KafkaInboundMessageHandler;
 import com.lei.xia.jasper.event.outbound.impl.KafkaOutboundMessageHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,8 @@ class KafkaConfigurationTest {
 
   @Test
   void should_create_kafka_inbound_message_handler() {
-    var actual = kafkaConfiguration.kafkaInboundMessageHandler();
+    var objectMapper = mock(ObjectMapper.class);
+    var actual = kafkaConfiguration.kafkaInboundMessageHandler(objectMapper);
     assertThat(actual).isNotNull().isExactlyInstanceOf(KafkaInboundMessageHandler.class);
   }
 

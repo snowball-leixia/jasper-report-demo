@@ -1,10 +1,11 @@
 package com.lei.xia.jasper.config;
 
-import com.github.javafaker.Faker;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lei.xia.jasper.event.inbound.InboundMessageHandler;
-import com.lei.xia.jasper.event.inbound.impl.KafkaInboundMessageHandler;
 import com.lei.xia.jasper.event.outbound.OutboundMessageHandler;
 import com.lei.xia.jasper.event.outbound.impl.KafkaOutboundMessageHandler;
+import com.lei.xia.jasper.event.inbound.KafkaInboundMessageHandler;
+
 import com.lei.xia.jasper.model.Movement;
 import java.util.Map;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -45,8 +46,8 @@ public class KafkaConfiguration {
   }
 
   @Bean
-  public InboundMessageHandler kafkaInboundMessageHandler() {
-    return new KafkaInboundMessageHandler();
+  public InboundMessageHandler kafkaInboundMessageHandler(@Autowired ObjectMapper objectMapper) {
+    return new KafkaInboundMessageHandler(objectMapper);
    }
   @Bean
   public OutboundMessageHandler kafkaOutboundMessageHandler(@Autowired KafkaTemplate<String, Movement> kafkaTemplate) {

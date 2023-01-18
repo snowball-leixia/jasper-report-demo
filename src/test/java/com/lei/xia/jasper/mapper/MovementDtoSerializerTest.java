@@ -1,10 +1,10 @@
 package com.lei.xia.jasper.mapper;
 
 
+import org.apache.kafka.common.KafkaException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lei.xia.jasper.model.Movement;
-import kafka.common.KafkaException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
